@@ -2,6 +2,7 @@
 #include <string>
 #include <string.h>
 #include <cmath>
+#include <conio.h>
 
 using namespace std;
 
@@ -57,11 +58,19 @@ void lerMedicamentos (struct Medicamentos x[]);
 
 void lerMedicos ( struct Medicos dbMedicos[], int &numMedicos, struct Especialidades dbEspecialidades[], int numEspecialidades, struct Cidades dbCidades[], int numCidades); 
 void incluirMedicos(struct Medicos dbMedicos[], int &numMedicos, struct Medicos T[], int contT);
+void selecionarMedicos(struct Medicos dbMedicos[], int &numMedicos);
+void excluirMedicos(struct Medicos dbMedicos[], int &numMedicos, struct Medicos T[], int contT);
+void imprimirMedicos(struct Medicos dbMedicos[], int &numMedicos);
 
 void lerPacientes (struct Pacientes dbPacientes[], int &numPacientes, struct Cidades dbCidades[], int numCidades);
 void incluirPacientes(struct Pacientes dbPacientes[], int &numPacientes, struct Pacientes T[], int contT);
+void selecionarPacientes(struct Pacientes dbPacientes[], int &numPacientes);
+void excluirPacientes(struct Pacientes dbPacientes[], int &numPacientes, struct Pacientes T[], int contT) ;
+void imprimirPacientes(struct Pacientes dbPacientes[], int &numPacientes);
 
 int main() {
+    int opcao;
+
     int numMedicos = 2;
     Medicos dbMedicos[40] = {
         {1, 1, 1, "Bruno", "Rua Jose de Alencar, 590", "18998051620"}, 
@@ -86,31 +95,64 @@ int main() {
 
     int numPacientes = 2;
     Pacientes dbPacientes[40] = {
-        {45469778835, 1, "Pedro Lucas", "Av. Rui Barbosa"},
-        {45241445312, 2, "Lucas Cardoso", "R. Paraná"}
+        {1, 1, "Lucas Cardoso", "R. Parana"},
+        {68477679010, 2, "Pedro Lucas", "Av. Rui Barbosa"}
     };
 
-    // lerCidade(dbCidades);
-    // lerEspecialidade(dbEspecialidades);
-    // lerCID(dbCID);
-    // lerMedicamentos(dbMedicamentos);
 
-    lerMedicos(dbMedicos, numMedicos, dbEspecialidades, numEspecialidades, dbCidades, numCidades);
+    while (opcao != 0) {
+        system("cls");
+    
+        cout << "============================================================" << endl
+             << "==========        GERENCIAMENTO HOSPITALAR        ==========" << endl
+             << "============================================================" << endl << endl << endl;
 
-    lerPacientes(dbPacientes, numPacientes, dbCidades, numCidades);
+        // cout << endl << numPacientes << endl;
+
+        cout << "MENU: " << endl;
+        cout << "(1) - Incluir medico(s)" << endl;
+        cout << "(2) - Excluir medico(s)" << endl;
+        cout << "(3) - Listar medico(s)" << endl;
+        cout << "(4) - Incluir paciente(s)" << endl;
+        cout << "(5) - Excluir paciente(s)" << endl;
+        cout << "(6) - Listar paciente(s)" << endl;
+        cout << endl << "(0) - Sair" << endl << endl;
+        cout << "Selecione uma opcao: ";
+        cin >> opcao;
+
+        switch (opcao) {
+            case 1:
+                lerMedicos(dbMedicos, numMedicos, dbEspecialidades, numEspecialidades, dbCidades, numCidades);
+                break;
+
+            case 2:
+                selecionarMedicos(dbMedicos, numMedicos);
+                break;
+
+            case 3:
+                imprimirMedicos(dbMedicos, numMedicos);
+                break;
+
+            case 4:
+                lerPacientes(dbPacientes, numPacientes, dbCidades, numCidades);
+                break;
+
+            case 5:
+                selecionarPacientes(dbPacientes, numPacientes);
+                break;
+
+            case 6:
+                imprimirPacientes(dbPacientes, numPacientes);
+                break;
+
+            default:
+                break;
+        }
+
+    }
 
     return 0;
 }
-
-
-void home() {
-    cout << "=============================================" << endl
-         << "========= GERENCIAMENTO DE HOSPITAL =========" << endl
-         << "=============================================" << endl << endl << endl;
-
-    cout << "MENU: ";
-}
-
 
 bool buscaEspecialidade(int codigo, struct Especialidades x[], int numEspecialidades) {
     int i;
@@ -227,6 +269,7 @@ void lerMedicos (
     struct Cidades dbCidades[],
     int numCidades
 ) {
+    system("cls");
     char conf;
     const int numT = 20;
     int contT=0, codMedico, codEspecialidade, codCidade;
@@ -307,19 +350,19 @@ void lerMedicos (
             i++;
             system("cls");
         } else {
-            i = numT;
-            conf = ' '; // Resetar o conf para poder ser utilizado outras vezes
+            // i = numT;
             // Confirmação da inclusão
-            for (;conf != 'S';) {
+            while (true) {
+                conf = ' '; // Resetar o conf para poder ser utilizado outras vezes
                 cout << endl << "Confirma a inclusao do(s) medico(s)? (S/N): ";
                 cin >> conf;
                 conf = toupper(conf);
                 switch (conf)  {
                     case 'S':
                         incluirMedicos(dbMedicos, numMedicos, T, contT);
-                        break;
+                        return;
                     case 'N':
-                        break;
+                        return;
                     default:
                         cout << endl << "DIGITE UMA RESPOSTA VALIDA" << endl;
                 }
@@ -360,7 +403,95 @@ void incluirMedicos(struct Medicos dbMedicos[], int &numMedicos, struct Medicos 
     numMedicos = numMedicos + contT; // Atualiza o número de médicos
 }
 
+void selecionarMedicos(struct Medicos dbMedicos[], int &numMedicos) {
+    system("cls");
+    
+    char conf;
+    const int numT = 20;
+    Medicos T[numT];
+    int contT=0;
+    int cod_med;
+    
+    int i = 0, f = numMedicos;
+    int m = (i + f) / 2;
+
+    cout << "Informe o CODIGO do medico: ";
+    cin >> cod_med;
+    
+    for (; f >= i && cod_med != dbMedicos[m].cod_med; m = (i + f) / 2){
+        if (cod_med > dbMedicos[m].cod_med) {
+            i = m + 1;
+        } else {
+            f = m - 1;
+        }
+    }
+    if (cod_med == dbMedicos[m].cod_med) {
+        cout << "Codigo do medico: " << dbMedicos[m].cod_med << endl;
+        cout << "Nome: " << dbMedicos[m].nome << endl << endl;
+        while (conf != 'S') {
+            conf = ' ';
+            cout << "Deseja excluir o cadastro de " << dbMedicos[m].nome << " ? (S/N): ";
+            cin >> conf;
+            conf = toupper(conf);
+            switch (conf)  {
+                case 'S':
+                    contT++;
+                    excluirMedicos(dbMedicos, numMedicos, T, contT);
+                    break;
+                case 'N':
+                    return;
+                default:
+                    cout << endl << "DIGITE UMA RESPOSTA VALIDA" << endl;
+            }
+        }
+    } else {
+        cout << "Medico nao encontrado";
+        getch();
+    }
+}
+
+void excluirMedicos(struct Medicos dbMedicos[], int &numMedicos, struct Medicos T[], int contT)  {
+    int x=0, y=0, z=0; // x: cont array atualizado ; y: cont array sequencial ; z: cont array transição
+    const int numA = 40;
+    Medicos A[numA];
+
+    for (; z < contT; z++) {
+        while (dbMedicos[y].cod_med == T[z].cod_med && y < numMedicos) {
+            y++;
+        }
+        if (y < numMedicos) {
+            A[x] = dbMedicos[y];
+            x++;
+        }
+        y++;
+    }
+    for (int i = 0; i < x; ++i) {
+        dbMedicos[i] = A[i];
+    }
+
+    numMedicos = numMedicos - contT;
+
+    return;
+}
+
+void imprimirMedicos(struct Medicos dbMedicos[], int &numMedicos) {
+    system("cls");
+
+    cout << endl << "====== LISTA DE MEDICOS ======" << endl;
+    for (int i=0 ; i<numMedicos ; i++) {
+        cout << endl << "Nome: " << dbMedicos[i].nome << endl
+            << "- Codigo: " << dbMedicos[i].cod_med << endl
+            << "- Cod. Especialidade: " << dbMedicos[i].cod_espec << endl
+            << "- Telefone: " << dbMedicos[i].tel << endl
+            << "- Cod. Cidade: " << dbMedicos[i].cod_cidade << endl
+            << "- Endereco: " << dbMedicos[i].endereco << endl;
+    }
+
+    getch();
+}
+
 void lerPacientes (struct Pacientes dbPacientes[], int &numPacientes, struct Cidades dbCidades[], int numCidades) {
+    system("cls");
     char conf;
     const int numT = 20;
     int contT=0, codCidade;
@@ -427,17 +558,17 @@ void lerPacientes (struct Pacientes dbPacientes[], int &numPacientes, struct Cid
             system("cls");
         } else {
             i = numT;
-            conf = ' ';
-            for (;conf != 'S';) {
+            while (true) {
+                conf = ' ';
                 cout << endl << "Confirma a inclusao do(s) paciente(s)? (S/N): ";
                 cin >> conf;
                 conf = toupper(conf);
                 switch (conf)  {
                     case 'S':
                         incluirPacientes(dbPacientes, numPacientes, T, contT);
-                        break;
+                        return; // Retorna à tela principal após a inclusão
                     case 'N':
-                        break;
+                        return; // Retorna à tela principal sem incluir os pacientes
                     default:
                         cout << endl << "DIGITE UMA RESPOSTA VALIDA" << endl;
                 }
@@ -474,4 +605,91 @@ void incluirPacientes(struct Pacientes dbPacientes[], int &numPacientes, struct 
     }
 
     numPacientes = numPacientes + contT;
+
+    return;
+}
+
+void selecionarPacientes(struct Pacientes dbPacientes[], int &numPacientes) {
+    system("cls");
+    
+    char conf;
+    const int numT = 20;
+    Pacientes T[numT];
+    int contT=0;
+    long long int CPF;
+    
+    int i = 0, f = numPacientes;
+    int m = (i + f) / 2;
+
+    cout << "Informe o CPF do paciente: ";
+    cin >> CPF;
+    
+    for (; f >= i && CPF != dbPacientes[m].CPF; m = (i + f) / 2){
+        if (CPF > dbPacientes[m].CPF) {
+            i = m + 1;
+        } else {
+            f = m - 1;
+        }
+    }
+    if (CPF == dbPacientes[m].CPF) {
+        cout << "Codigo do paciente: " << dbPacientes[m].CPF << endl;
+        cout << "Nome: " << dbPacientes[m].nome << endl << endl;
+        while (conf != 'S') {
+            conf = ' ';
+            cout << "Deseja excluir o cadastro de " << dbPacientes[m].nome << " ? (S/N): ";
+            cin >> conf;
+            conf = toupper(conf);
+            switch (conf)  {
+                case 'S':
+                    contT++;
+                    excluirPacientes(dbPacientes, numPacientes, T, contT);
+                    break;
+                case 'N':
+                    return;
+                default:
+                    cout << endl << "DIGITE UMA RESPOSTA VALIDA" << endl;
+            }
+        }
+    } else {
+        cout << "Paciente nao encontrado";
+        getch();
+    }
+}
+
+void excluirPacientes(struct Pacientes dbPacientes[], int &numPacientes, struct Pacientes T[], int contT)  {
+    int x=0, y=0, z=0; // x: cont array atualizado ; y: cont array sequencial ; z: cont array transição
+    const int numA = 40;
+    Pacientes A[numA];
+
+    for (; z < contT; z++) {
+        while (dbPacientes[y].CPF == T[z].CPF && y < numPacientes) {
+            y++;
+        }
+        if (y < numPacientes) {
+            A[x] = dbPacientes[y];
+            x++;
+        }
+        y++;
+    }
+    for (int i = 0; i < x; ++i) {
+        dbPacientes[i] = A[i];
+    }
+
+    numPacientes = numPacientes - contT;
+
+    return;
+}
+
+void imprimirPacientes(struct Pacientes dbPacientes[], int &numPacientes) {
+    system("cls");
+
+    cout << endl << "====== LISTA DE PACIENTES ======" << endl;
+    for (int i=0 ; i<numPacientes ; i++) {
+        cout << endl << "Nome: " << dbPacientes[i].nome << endl 
+            << "- CPF: " << dbPacientes[i].CPF << endl
+            << "- Endereco: " << dbPacientes[i].endereco << endl
+            << "- Cod. Cidade: " << dbPacientes[i].cod_cidade << endl;
+    }
+
+    getch();
 }

@@ -1,6 +1,9 @@
-🔄️
-✅
-⚠️
+🔄️  FAZENDO
+✅  FEITO
+⚠️  ATE$NÇÃO
+📍  FIXO
+🆗  DUVIDA TIRADA
+🤔  REFLETIR
 
 ========= FEITO =========
 
@@ -15,21 +18,28 @@
     3.1) O programa deverá garantir que o CPF do paciente a ser inserido não existe na tabela de pacientes. ✅
     3.2) Quando o usuário digitar o código da cidade, o programa deverá buscar este código na tabela de Cidades e exibir o nome da cidade e UF. ✅
 
+4) Escreva uma função para permitir a exclusão de registros na tabela de Pacientes. ✅
+
+
 ========= A FAZER =========
 
+> Dúvidas sanadas: 
+    - Como fazer um array como tamanho variável? 🆗
+        - O usuário irá definir quantas informações deverá colocar? 🆗
+        - Array com valor contante? 🆗
+        - Número fixo de cadastros/limite? 🆗
+        - Como escrever palavras com espaço sem o sistema crashar? 🆗
+
 > Dúvidas:
-    - Como fazer um array como tamanho variável? X
-        - O usuário irá definir quantas informações deverá colocar? X
-        - Array com valor contante? X
-        - Número fixo de cadastros/limite? X
-        - Como escrever palavras com espaço sem o sistema crashar? X
- 
+    - É necessário passar o array por referência para estar o autualizando? É possível?
+        - Se sim, como?
+
 > Validação de campos:
     - Caso não houver a cidade/especialidade informada no cadastro do médico, NÃO CADASTRAR/ENTRAR EM LOOP 📍 <- Isso deverá valer para outros campos também
-    - Aumentar a quantidade de dados em cada array do banco após inclcusão 📍
+    - Aumentar a quantidade de dados em cada array do banco após inclcusão 📍<- Isso deverá valer para todos os arrays
+    - Organizar todas as chaves primarias em ordem crescente após inclusão/leitura 📍<- Isso deverá valer para todos os arrays
+        - Isso deverá ser feito apenas nos arrays de TRANSIÇÃO, antes de chamar a função de inclusão ⚠️
 
-
-4) Escreva uma função para permitir a exclusão de registros na tabela de Pacientes.
 
 5) Escreva uma função para permitir o agendamento de uma consulta.
     5.1) Quando o usuário digitar o CPF do paciente, o programa deverá buscar este código na tabela de Pacientes e exibir o nome do paciente e o nome da cidade e UF.
