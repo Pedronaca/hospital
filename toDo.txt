@@ -41,7 +41,7 @@
     5.1) Quando o usuário digitar o CPF do paciente, o programa deverá buscar este código na tabela de Pacientes e exibir o nome do paciente e o nome da cidade e UF. ✅
     5.2) Quando o usuário digitar o código do médico, o programa deverá buscar este código na tabela de Médicos e exibir o nome do médico e a descrição da especialidade. ✅
     5.3) Quando o usuário digitar o código CID, o programa deverá buscar este código na tabela de CID e exibir a descrição. ✅
-    5.4) Quando o usuário digitar o código do medicamento, o programa deverá buscar este código na tabela de Medicamentos e exibir a descrição.
+    5.4) Quando o usuário digitar o código do medicamento, o programa deverá buscar este código na tabela de Medicamentos e exibir a descrição. ✅
     5.5) Quando o usuário digitar a qtde_medicamento, o programa deverá acessar a tabela de Medicamentos e verificar se a quantidade em estoque é suficiente para atender a quantidade receitada na consulta.
     5.5.1) O programa não deverá permitir a digitação de uma quantidade maior do que a quantidade disponível em estoque.
     5.6) A quantidade do medicamento receitada deverá ser subtraída da quantidade em estoque do medicamento.
