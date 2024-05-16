@@ -7,7 +7,7 @@
 
 ========= FEITO =========
 
-1) Escreva funções específicas para a leitura dos dados das estruturas: Cidades, Especialidades, CID, Medicamentos. ✅⚠️ <- Incluir dados dentro de um arrays
+1) Escreva funções específicas para a leitura dos dados das estruturas: Cidades, Especialidades, CID, Medicamentos. 🔄️⚠️ <- Incluir dados dentro de um arrays
 
 2) Escreva uma função para permitir a inclusão de novos registros na tabela de Médicos. ✅
     2.1) O programa deverá garantir que o código do médico a ser inserido não existe na tabela de Médicos. ✅
@@ -31,14 +31,10 @@
         - Como escrever palavras com espaço sem o sistema crashar? 🆗
 
 > Dúvidas:
-    - É necessário passar o array por referência para estar o autualizando? É possível?
-        - Se sim, como?
 
 > Validação de campos:
     - Caso não houver a cidade/especialidade informada no cadastro do médico, NÃO CADASTRAR/ENTRAR EM LOOP 📍 <- Isso deverá valer para outros campos também
     - Aumentar a quantidade de dados em cada array do banco após inclcusão 📍<- Isso deverá valer para todos os arrays
-    - Organizar todas as chaves primarias em ordem crescente após inclusão/leitura 📍<- Isso deverá valer para todos os arrays
-        - Isso deverá ser feito apenas nos arrays de TRANSIÇÃO, antes de chamar a função de inclusão ⚠️
 
 
 5) Escreva uma função para permitir o agendamento de uma consulta.

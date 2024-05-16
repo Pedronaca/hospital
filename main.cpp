@@ -1,6 +1,6 @@
 #include <iostream>
-#include <string>
 #include <string.h>
+#include <string>
 #include <cmath>
 #include <conio.h>
 
@@ -41,7 +41,8 @@ struct Medicamentos {
 };
 
 struct Consultas {
-    int CPF_paciente, cod_med, cod_cid, cod_medic, qtd_medic;
+    long long int CPF_paciente;
+    int cod_med, cod_cid, cod_medic, qtd_medic;
     string data, horario;
 };
 
@@ -67,6 +68,8 @@ void incluirPacientes(struct Pacientes dbPacientes[], int &numPacientes, struct 
 void selecionarPacientes(struct Pacientes dbPacientes[], int &numPacientes);
 void excluirPacientes(struct Pacientes dbPacientes[], int &numPacientes, struct Pacientes T[], int contT) ;
 void imprimirPacientes(struct Pacientes dbPacientes[], int &numPacientes);
+
+void agendarConsulta();
 
 int main() {
     int opcao;
@@ -107,16 +110,19 @@ int main() {
              << "==========        GERENCIAMENTO HOSPITALAR        ==========" << endl
              << "============================================================" << endl << endl << endl;
 
-        // cout << endl << numPacientes << endl;
-
-        cout << "MENU: " << endl;
+        cout << "MENU: " << endl << endl;
         cout << "(1) - Incluir medico(s)" << endl;
         cout << "(2) - Excluir medico(s)" << endl;
-        cout << "(3) - Listar medico(s)" << endl;
+        cout << "(3) - Listar medico(s)" << endl << endl;
+
         cout << "(4) - Incluir paciente(s)" << endl;
         cout << "(5) - Excluir paciente(s)" << endl;
-        cout << "(6) - Listar paciente(s)" << endl;
-        cout << endl << "(0) - Sair" << endl << endl;
+        cout << "(6) - Listar paciente(s)" << endl << endl;
+
+        cout << "(7) - Agendar consulta" << endl << endl;
+
+        cout << "(0) - Sair" << endl << endl;
+
         cout << "Selecione uma opcao: ";
         cin >> opcao;
 
@@ -145,10 +151,13 @@ int main() {
                 imprimirPacientes(dbPacientes, numPacientes);
                 break;
 
+            case 7:
+                agendarConsulta();
+                break;
+
             default:
                 break;
         }
-
     }
 
     return 0;
@@ -177,6 +186,10 @@ bool buscaCidade(int codigo, struct Cidades x[], int numCidades) {
     cout << "CIDADE NAO ENCONTRADA!" << endl;
     return false;
 }
+
+// bool buscaPaciente(long long int ) {
+
+// }
 
 
 void lerCidade (struct Cidades x[]) {
@@ -600,6 +613,7 @@ void incluirPacientes(struct Pacientes dbPacientes[], int &numPacientes, struct 
         z++;
         x++;
     }
+
     for (int i = 0; i < x; ++i) {
         dbPacientes[i] = A[i];
     }
@@ -692,4 +706,31 @@ void imprimirPacientes(struct Pacientes dbPacientes[], int &numPacientes) {
     }
 
     getch();
+}
+
+void agendarConsulta() {
+    Consultas T[1];
+
+    cout << "Informe o CPF do paciente: ";
+    cin >> T[0].CPF_paciente;
+
+    cout << "Informe o CODIGO DO MEDICO: ";
+    cin >> T[0].cod_med;
+
+    cout << "Informe o CODIGO DA CID: ";
+    cin >> T[0].cod_cid;
+
+    cout << "Informe o CODIGO DO MEDICAMENTO: ";
+    cin >> T[0].cod_medic;
+
+    cout << "Informe a QUANTIDADE DO MEDICAMENTO: ";
+    cin >> T[0].qtd_medic;
+
+    cout << "Informe a DATA da consulta: ";
+    cin.ignore();
+    getline(cin, T[0].data);
+
+    cout << "Informe o HORARIO da consulta: ";
+    cin.ignore();
+    getline(cin, T[0].horario);
 }
