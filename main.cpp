@@ -1,5 +1,4 @@
 #include <iostream>
-#include <string.h>
 #include <string>
 #include <cmath>
 #include <conio.h>
@@ -56,12 +55,15 @@ void lerEspecialidade(struct Especialidades x[]);
 
 // MEDICAMENTOS
 void lerMedicamentos(struct Medicamentos x[]);
-bool buscaMedicamento(int cod_medic, struct Medicamentos x[], int numMedicamentos);
-bool consultaMedicamento(int cod_medic, struct Medicamentos x[], int numMedicamentos, int qtd_solicitada, int &indexDbMedicamento);
+bool buscaMedicamento(int cod_medic, struct Medicamentos x[], int numMedicamentos, bool detalhes, string corTexto);
+bool consultaQuantidadeMedicamento(int cod_medic, struct Medicamentos x[], int numMedicamentos, int qtd_solicitada, int &indexDbMedicamento);
+void imprimirMedicamentos(struct Medicamentos dbMedicamentos[], int numMedicamentos);
+void buscaFaltasMedicamentos(struct Medicamentos x[], int numMedicamentos);
+int indexMedicamento(int cod_medic, struct Medicamentos dbMedicamentos[], int numMedicamentos);
 
 // CID
 void lerCID(struct CID x[]);
-bool buscaCID(string cod_cid, struct CID x[], int numCID);
+bool buscaCID(string cod_cid, struct CID x[], int numCID, string corTexto);
 
 // MÉDICOS
 void lerMedicos(struct Medicos dbMedicos[], int& numMedicos, struct Especialidades dbEspecialidades[], int numEspecialidades, struct Cidades dbCidades[], int numCidades);
@@ -69,7 +71,7 @@ void incluirMedicos(struct Medicos dbMedicos[], int& numMedicos, struct Medicos 
 void selecionarMedicos(struct Medicos dbMedicos[], int& numMedicos);
 void excluirMedicos(struct Medicos dbMedicos[], int& numMedicos, struct Medicos T[], int contT);
 void imprimirMedicos(struct Medicos dbMedicos[], int& numMedicos);
-bool buscaDadosMedicos(int cod_med, struct Medicos x[], int numMedicos, struct Especialidades y[], int numEspecialidades);
+bool buscaDadosMedicos(int cod_med, struct Medicos x[], int numMedicos, struct Especialidades y[], int numEspecialidades, bool detalhes);
 
 // PACIENTES
 void lerPacientes(struct Pacientes dbPacientes[], int& numPacientes, struct Cidades dbCidades[], int numCidades);
@@ -82,7 +84,7 @@ bool buscaDadosPacientes(long long int CPF, struct Pacientes x[], int numPacient
 // CONSULTAS
 void agendarConsulta(struct Pacientes dbPacientes[], int numPacientes, struct Cidades dbCidades[], int numCidades, struct Medicos dbMedicos[], int numMedicos, struct Especialidades dbEspecialidades[], int numEspecialidades, struct CID dbCID[], int numCID, struct Medicamentos dbMedicamentos[], int numMedicamentos, struct Consultas dbConsultas[], int &numConsutlas);
 void incluirConsulta(struct Consultas dbConsultas[], int &numConsultas, struct Consultas T[], int indexDbMedicamento, struct Medicamentos dbMedicamentos[], int qtd_solicitada);
-void imprimirConsultas(struct Consultas dbPaciente[], int numConsultas);
+void imprimirConsultas(struct Consultas dbPaciente[], int numConsultas, struct Medicos dbMedicos[], int numMedicos, struct CID dbCID[], int numCID, struct Medicamentos dbMedicamentos[], int numMedicamentos);
 
 int main() {
     int opcao = 0;
@@ -113,7 +115,7 @@ int main() {
     
     int numMedicamentos = 2;
     Medicamentos dbMedicamentos[40] = {
-        {1, 10, 1, 10, 6.99, "DORFLEX C/10CP 300MG"},
+        {1, 4, 6, 10, 6.99, "DORFLEX C/10CP 300MG"},
         {2, 10, 1, 10, 24.49, "ANADOR C/24CP 500MG"}
     };
 
@@ -123,8 +125,10 @@ int main() {
         {68477679010, 2, "Pedro Lucas", "Av. Rui Barbosa"}
     };
 
-    int numConsultas = 0;
-    Consultas dbConsultas[40];
+    int numConsultas = 1;
+    Consultas dbConsultas[40] =  {
+        {68477679010, 1, 1, 1, "T30.1", "10/10/2024", "10:30"}
+    };
 
     do {
         system("cls");
@@ -144,6 +148,8 @@ int main() {
 
         cout << "(7) - Agendar consulta" << endl;
         cout << "(8) - Listar consultas" << endl << endl;
+
+        cout << "(9) - Listar medicamentos" << endl << endl;
 
         cout << "(0) - Sair" << endl << endl;
 
@@ -180,7 +186,11 @@ int main() {
                 break;
 
             case 8:
-                imprimirConsultas(dbConsultas, numConsultas);
+                imprimirConsultas(dbConsultas, numConsultas, dbMedicos, numMedicos, dbCID, numCID, dbMedicamentos, numMedicamentos);
+                break;
+
+            case 9:
+                imprimirMedicamentos(dbMedicamentos, numMedicamentos);
                 break;
 
             default:
@@ -191,11 +201,21 @@ int main() {
     return 0;
 }
 
+int indexMedicamento(int cod_medic, struct Medicamentos dbMedicamentos[], int numMedicamentos) {
+    int i=0;
+    for (; i<numMedicamentos ; i++) {
+        if (cod_medic == dbMedicamentos[i].cod_medic) {
+            return i;
+        }
+    }
+    return 0;
+}
+
 bool buscaEspecialidade(int codigo, struct Especialidades x[], int numEspecialidades) {
     int i;
     for (i = 0; i < numEspecialidades; i++) {
         if (codigo == x[i].cod_espec) {
-            cout << "Especialidade: " << x[i].descricao << endl;
+            cout << "\033[32m" << "Especialidade: " << x[i].descricao << "\033[0m" << endl;
             return true;
         }
     }
@@ -206,7 +226,7 @@ bool buscaEspecialidade(int codigo, struct Especialidades x[], int numEspecialid
 bool buscaCidade(int codigo, struct Cidades x[], int numCidades) {
     for (int i = 0; i < numCidades; i++) {
         if (codigo == x[i].cod_cidade) {
-            cout << "Cidade: " << x[i].nome << " - " << x[i].UF << endl << endl;
+            cout << "\033[32m" << "Cidade: " << x[i].nome << " - " << x[i].UF << "\033[0m" << endl << endl;
             return true;
         }
     }
@@ -214,22 +234,28 @@ bool buscaCidade(int codigo, struct Cidades x[], int numCidades) {
     return false;
 }
 
-bool buscaCID(string cod_cid, struct CID x[], int numCID) {
+bool buscaCID(string cod_cid, struct CID x[], int numCID, string corTexto) {
     for (int i = 0; i < numCID; i++) {
         if (cod_cid == x[i].cod_cid) {
-            cout << "CID: " << x[i].cod_cid << " - " << x[i].descricao << endl << endl;
+            cout << corTexto << "CID: " << x[i].cod_cid << " - " << x[i].descricao << endl;
             return true;
         }
     }
-    cout << "\033[31m" << "CID NAO ENCONTRADA!" << "\033[0m" << endl << endl;
+    cout << "\033[31m" << "CID NAO ENCONTRADA!" << "\033[0m" << endl;
     return false;
 }
 
-bool buscaMedicamento(int cod_medic, struct Medicamentos x[], int numMedicamentos) {
+bool buscaMedicamento(int cod_medic, struct Medicamentos x[], int numMedicamentos, bool detalhes, string corTexto) {
     for (int i = 0; i < numMedicamentos; i++) {
         if (cod_medic == x[i].cod_medic) {
-            cout << "Medicamento: " << x[i].descricao << endl 
-                << "Em estoque: " << x[i].qtd_estoque << endl << endl;
+            cout << corTexto << "Medicamento: " << x[i].descricao << " - Quantidade em estoque: " << x[i].qtd_estoque << endl;
+            if (detalhes) {
+                cout << "Estoque minimo: " << x[i].estoque_min << endl
+                    << "Estoque maximo: " << x[i].estoque_max << endl
+                    << "Valor unitario: R$" << x[i].preco_un << endl  
+                    << "Valor total em estoque: R$" << x[i].qtd_estoque * x[i].preco_un << endl
+                    << "Codigo do medicamento: " << x[i].cod_medic << endl << endl;
+            }
 
             return true;
         }
@@ -238,14 +264,14 @@ bool buscaMedicamento(int cod_medic, struct Medicamentos x[], int numMedicamento
     return false;
 }
 
-bool consultaMedicamento(int cod_medic, struct Medicamentos x[], int numMedicamentos, int qtd_solicitada, int &indexDbMedicamento) {
+bool consultaQuantidadeMedicamento(int cod_medic, struct Medicamentos x[], int numMedicamentos, int qtd_solicitada, int &indexDbMedicamento) {
     for (int i = 0; i < numMedicamentos; i++) {
         if (cod_medic == x[i].cod_medic ) {
             if (qtd_solicitada > x[i].qtd_estoque) {
                 cout << "\033[31m" << "QUANTIDADE SOLITIADA E MAIOR QUE A QUANTIDADE EM ESTOQUE" << "\033[0m" << endl << endl;
                 return false;
             } else {
-                cout << "Quantidade solicitada: " << qtd_solicitada << endl << endl;
+                cout << "\033[32m" << "Quantidade solicitada: " << qtd_solicitada << "\033[0m" << endl << endl;
                 indexDbMedicamento = i;
                 return true;
             }
@@ -267,8 +293,8 @@ bool buscaDadosPacientes(long long int CPF, struct Pacientes x[], int numPacient
         }
     }
     if (CPF == x[m].CPF) {
-        cout << "Codigo do paciente: " << x[m].CPF << endl;
-        cout << "Nome: " << x[m].nome << endl;
+        cout << "\033[32m" << "Codigo do paciente: " << x[m].CPF << "\033[0m" << endl;
+        cout << "\033[32m" << "Nome: " << x[m].nome << "\033[0m" << endl;
         buscaCidade(x[m].cod_cidade, y, numCidades);
         return true;
     }
@@ -279,7 +305,7 @@ bool buscaDadosPacientes(long long int CPF, struct Pacientes x[], int numPacient
 }
 
 
-bool buscaDadosMedicos(int cod_med, struct Medicos x[], int numMedicos, struct Especialidades y[], int numEspecialidades) {
+bool buscaDadosMedicos(int cod_med, struct Medicos x[], int numMedicos, struct Especialidades y[], int numEspecialidades, bool detalhes) {
     int i = 0, f = numMedicos;
     int m = (i + f) / 2;
     for (; f >= i && cod_med != x[m].cod_med; m = (i + f) / 2) {
@@ -291,13 +317,18 @@ bool buscaDadosMedicos(int cod_med, struct Medicos x[], int numMedicos, struct E
         }
     }
     if (cod_med == x[m].cod_med) {
-        cout << "Codigo do paciente: " << x[m].cod_med << endl;
-        cout << "Nome: " << x[m].nome << endl;
-        buscaEspecialidade(x[m].cod_espec, y, numEspecialidades);
+        if (detalhes) {
+            cout << "\033[32m" << "Codigo do medico: " << x[m].cod_med << "\033[0m" << endl;
+            cout << "\033[32m" << "Nome: " << x[m].nome << "\033[0m" << endl;
+            buscaEspecialidade(x[m].cod_espec, y, numEspecialidades);
+        } else {
+            cout << "Medico: " << x[m].nome << endl;
+        }
+        
         return true;
     }
     else {
-        cout << "\033[31m" << "PACIENTE NAO ENCONTRADO" << "\033[0m" << endl << endl;
+        cout << "\033[31m" << "MEDICO NAO ENCONTRADO" << "\033[0m" << endl << endl;
         return false;
     }
 }
@@ -444,10 +475,10 @@ void lerMedicos(
         while (!codEspecialidadeValido) {
             cout << endl << "Informe o CODIGO DA ESPECIALIDADE do medico: ";
             cin >> codEspecialidade;
-            if (buscaEspecialidade(codEspecialidade, dbEspecialidades, numEspecialidades)) {
-                T[i].cod_espec = codEspecialidade;
-                codEspecialidadeValido = true;
-            }
+                if (buscaEspecialidade(codEspecialidade, dbEspecialidades, numEspecialidades)) {
+                    T[i].cod_espec = codEspecialidade;
+                    codEspecialidadeValido = true;
+                }
         }
 
         while (!codCidadeValido) {
@@ -648,7 +679,7 @@ void lerPacientes(struct Pacientes dbPacientes[], int& numPacientes, struct Cida
             }
             if (CPFValido) {
                 for (int j = 0; j < contT; j++) {
-                    if (CPFValido == T[j].CPF) {
+                    if (CPF == T[j].CPF) {
                         j = contT;
                         CPFValido = false;
                         cout << "\033[31m" << "ESTE CPF JA ESTA EM USO!" << "\033[0m" << endl;
@@ -710,7 +741,7 @@ void lerPacientes(struct Pacientes dbPacientes[], int& numPacientes, struct Cida
     }
 }
 
-void incluirPacientes(struct Pacientes dbPacientes[], int& numPacientes, struct Pacientes T[], int contT) {
+void incluirPacientes(struct Pacientes dbPacientes[], int &numPacientes, struct Pacientes T[], int contT) {
     int x = 0, y = 0, z = 0; // x: cont array atualizado ; y: cont array sequencial ; z: cont array transição
     const int numA = 40;
     Pacientes A[numA];
@@ -872,37 +903,37 @@ void agendarConsulta(
         cout << "Informe o CODIGO DO MEDICO: ";
         cin >> cod_med;
         cout << endl;
-        if (buscaDadosMedicos(cod_med, dbMedicos, numMedicos, dbEspecialidades, numEspecialidades)) {
+        if (buscaDadosMedicos(cod_med, dbMedicos, numMedicos, dbEspecialidades, numEspecialidades, true)) {
             T[0].cod_med = cod_med;
             codMedValido = true;
         }
     }
 
     while (!codCIDValido) {
-        cout << "Informe o CODIGO DA CID: ";
+        cout << endl << "Informe o CODIGO DA CID: ";
         cin >> cod_cid;
         cout << endl;
-        if (buscaCID(cod_cid, dbCID, numCID)) {
+        if (buscaCID(cod_cid, dbCID, numCID, "\033[32m")) {
             T[0].cod_cid = cod_cid;
             codCIDValido = true;
         }
     }
 
     while (!codMedic) {
-        cout << "Informe o CODIGO DO MEDICAMENTO: ";
+        cout << endl <<"Informe o CODIGO DO MEDICAMENTO: ";
         cin >> cod_medic;
         cout << endl;
-        if (buscaMedicamento(cod_medic, dbMedicamentos, numMedicamento)) {
+        if (buscaMedicamento(cod_medic, dbMedicamentos, numMedicamento, false, "\033[32m")) {
             T[0].cod_medic = cod_medic;
             codMedic = true;
         }
     }
 
     while (!qtdSolicitadaValida) {
-        cout << "Informe a QUANTIDADE DO MEDICAMENTO: ";
+        cout << endl << "Informe a QUANTIDADE DO MEDICAMENTO: ";
         cin >> qtd_solicitada;
         cout << endl;
-        if (consultaMedicamento(cod_medic, dbMedicamentos, numMedicamento, qtd_solicitada, indexDbMedicamento)) {
+        if (consultaQuantidadeMedicamento(cod_medic, dbMedicamentos, numMedicamento, qtd_solicitada, indexDbMedicamento)) {
             T[0].qtd_medic = qtd_solicitada;
             qtdSolicitadaValida = true;
         }
@@ -971,21 +1002,98 @@ void incluirConsulta(struct Consultas dbConsultas[], int &numConsultas, struct C
     return;
 }
 
-void imprimirConsultas(struct Consultas dbPaciente[], int numConsultas) {
+void imprimirConsultas(struct Consultas dbPaciente[], int numConsultas, struct Medicos dbMedicos[], int numMedicos, struct CID dbCID[], int numCID, struct Medicamentos dbMedicamentos[], int numMedicamentos) {
     system("cls");
+    int numEspecRef=1;
+    Especialidades ref[1];
+    double totalArecadado=0;
 
     cout << endl << "====== LISTA DE CONSULTAS ======" << endl << endl;
     cout << "Numero de consultas: " << numConsultas << endl;
 
-    for (int i = 0; i < numConsultas; i++) {
-        cout << endl 
-            << "CPF Paciente: " << dbPaciente[i].CPF_paciente << endl
-            << "Codigo do medico: " << dbPaciente[i].cod_med << endl
-            << "Data: " << dbPaciente[i].data << endl
-            << "Horario: " << dbPaciente[i].horario << endl
-            << "CID: " << dbPaciente[i].cod_cid << endl
-            << "Codigo do medicamento: " << dbPaciente[i].cod_medic << endl
-            << "Quantidade solicitada: " << dbPaciente[i].qtd_medic << endl;
+    for (int i=0 ; i<numConsultas ; i++) {
+        totalArecadado = totalArecadado + 100 + (dbMedicamentos[indexMedicamento(dbPaciente[i].cod_medic, dbMedicamentos, numMedicamentos)].preco_un * dbPaciente[i].qtd_medic);
+    }
+
+    cout << "Total arrecadado: R$" << totalArecadado << endl;
+
+    for (int i=0 ; i < numConsultas ; i++) {
+        cout << endl << "CPF Paciente: " << dbPaciente[i].CPF_paciente << endl;
+        buscaDadosMedicos(dbPaciente[i].cod_med, dbMedicos, numMedicos, ref, numEspecRef, false);
+        cout << "Data: " << dbPaciente[i].data << endl;
+        cout << "Horario: " << dbPaciente[i].horario << endl;
+        buscaCID(dbPaciente[i].cod_cid, dbCID, numCID, "\033[37m");
+        buscaMedicamento(dbPaciente[i].cod_medic, dbMedicamentos, numMedicamentos, false, "\033[37m");
+        cout << "Quantidade solicitada: " << dbPaciente[i].qtd_medic << endl;
+        cout << "Valor da consulta: R$" << 100 + (dbMedicamentos[indexMedicamento(dbPaciente[i].cod_medic, dbMedicamentos, numMedicamentos)].preco_un * dbPaciente[i].qtd_medic) << endl;
+    }
+
+    getch();
+}
+
+void imprimirMedicamentos(struct Medicamentos dbMedicamentos[], int numMedicamentos) {
+    system("cls");
+    
+    int cod_medic;
+    bool codMedicValido = false;
+
+    cout << endl << "====== LISTA DE MEDICAMENTOS ======" << endl << endl;
+    cout << "Numero de medicamentos: " << numMedicamentos << endl << endl << endl;
+    cout << "\033[45m" << "(CODIGO) - DESCRICAO" << "\033[0m" << endl;
+
+    for (int i = 0; i < numMedicamentos; i++) {
+        cout << endl << "(" << dbMedicamentos[i].cod_medic << ") - " << dbMedicamentos[i].descricao << endl;
+    }
+
+    cout << endl << "=========================================================" << endl << endl
+        << "OPCOES:" << endl << endl
+        << "(-1) - Medicamentos ABAIXO do ESTOQUE MINIMO" << endl
+        << "(0) - SAIR" << endl << endl;
+
+
+    while (!codMedicValido) {
+        cout << "Informe o CODIGO DO MEDICAMENTO ou OPCAO desejada: ";
+        cin >> cod_medic;
+
+        switch (cod_medic) {
+            case -1:
+                buscaFaltasMedicamentos(dbMedicamentos, numMedicamentos);
+                return;
+
+            case 0:
+                return; 
+
+            default:
+                cout << endl;
+                if (buscaMedicamento(cod_medic, dbMedicamentos, numMedicamentos, true, "\033[37m")) {
+                    codMedicValido = true;
+                }
+        }
+    }
+
+    getch();
+}
+
+void buscaFaltasMedicamentos(struct Medicamentos x[], int numMedicamentos) {
+    system("cls");
+
+    int qtd_faltas = 0;
+
+    cout << "====== LISTA DE MEDICAMENTOS EM FALTA ======" << endl << endl;
+
+    for (int i = 0; i < numMedicamentos; i++) {
+        if (x[i].qtd_estoque < x[i].estoque_min) {
+            cout << "Medicamento: " << "\033[41m" << x[i].descricao << "\033[0m" << " = Codigo: " << x[i].cod_medic << endl 
+                << "Em estoque: " << "\033[31m" << x[i].qtd_estoque << "\033[0m" << endl
+                << "Estoque minimo: " << "\033[33m" << x[i].estoque_min << "\033[0m" << endl
+                << "Estoque maximo: " << x[i].estoque_max << endl 
+                << "Quantidade a ser comprada: R$" << "\033[36m" << x[i].estoque_max - x[i].qtd_estoque << "\033[0m || Valor de compra: R$" << (x[i].estoque_max - x[i].qtd_estoque) * x[i].preco_un << endl << endl;
+
+            qtd_faltas++;
+        }
+    }
+    if (qtd_faltas == 0) {
+        cout << "\033[32m" << "NAO HA MEDICAMENTOS EM FALTA!" << "\033[0m" << endl << endl;
     }
 
     getch();

@@ -1,13 +1,19 @@
 🔄️  FAZENDO
 ✅  FEITO
-⚠️  ATE$NÇÃO
+⚠️  ATENÇÃO
 📍  FIXO
 🆗  DUVIDA TIRADA
 🤔  REFLETIR
 
 ========= FEITO =========
 
-1) Escreva funções específicas para a leitura dos dados das estruturas: Cidades, Especialidades, CID, Medicamentos. 🔄️⚠️ <- Incluir dados nos seus respectivos arrays
+> Dúvidas sanadas: 
+    - Como fazer um array como tamanho variável? 🆗
+        - O usuário irá definir quantas informações deverá colocar? 🆗
+        - Array com valor contante? 🆗
+        - Número fixo de cadastros/limite? 🆗
+        - Como escrever palavras com espaço sem o sistema crashar? 🆗
+
 
 2) Escreva uma função para permitir a inclusão de novos registros na tabela de Médicos. ✅
     2.1) O programa deverá garantir que o código do médico a ser inserido não existe na tabela de Médicos. ✅
@@ -18,7 +24,7 @@
     3.1) O programa deverá garantir que o CPF do paciente a ser inserido não existe na tabela de pacientes. ✅
     3.2) Quando o usuário digitar o código da cidade, o programa deverá buscar este código na tabela de Cidades e exibir o nome da cidade e UF. ✅
 
-4) Escreva uma função para permitir a exclusão de registros na tabela de Pacientes. ✅
+
 
 5) Escreva uma função para permitir o agendamento de uma consulta. ✅
     5.1) Quando o usuário digitar o CPF do paciente, o programa deverá buscar este código na tabela de Pacientes e exibir o nome do paciente e o nome da cidade e UF. ✅
@@ -29,30 +35,29 @@
     5.5.1) O programa não deverá permitir a digitação de uma quantidade maior do que a quantidade disponível em estoque. ✅
     5.6) A quantidade do medicamento receitada deverá ser subtraída da quantidade em estoque do medicamento. ✅
     
+6) Escreva uma função para permitir ao usuário consultar os dados de determinado medicamento. ✅
+    6.1) Para cada medicamento consultado, exibir: todos os seus dados e o valor total em estoque do medicamento (quant_estoque * preço_unitário). ✅
+
+7) Escreva uma função para exibir todos os registros da tabela de medicamentos que estejam com a quantidade em estoque abaixo do estoque mínimo. ✅⚠️ <- Dar a opção de comprar
+    7.1) As seguintes informações devem ser exibidas: código, descrição, qtde estoque, estoque máximo, qtde a ser comprada, valor da compra. ✅
+    7.1.1) A quantidade a ser comprada é calculada subtraindo o estoque máximo da quantidade em estoque. ✅
+    7.2) Ao final, a função deverá exibir o valor total ser comprado. ✅
+
+8) Escreva uma função para exibir o valor total arrecadado com todas as consultas, que deve ser calculado pelo valor de cada consulta (R$100) acrescido do valor do medicamento receitado para cada consulta. ✅
+    8.1) O valor do medicamento receitado para cada consulta deve ser calculado multiplicando a quantidade de medicamento receitada pelo preço unitário do medicamento. ✅
+
 
 ========= A FAZER =========
 
-> Dúvidas sanadas: 
-    - Como fazer um array como tamanho variável? 🆗
-        - O usuário irá definir quantas informações deverá colocar? 🆗
-        - Array com valor contante? 🆗
-        - Número fixo de cadastros/limite? 🆗
-        - Como escrever palavras com espaço sem o sistema crashar? 🆗
-
 > Dúvidas:
+    - As funções de leitura devem ser necessariamente usando o método de inclusão?
 
 > Validação de campos:
     - Caso não houver a cidade/especialidade informada no cadastro do médico, NÃO CADASTRAR/ENTRAR EM LOOP 📍 <- Isso deverá valer para outros campos também
     - Aumentar a quantidade de dados em cada array do banco após inclcusão 📍<- Isso deverá valer para todos os arrays
 
 
-6) Escreva uma função para permitir ao usuário consultar os dados de determinado medicamento.
-    6.1) Para cada medicamento consultado, exibir: todos os seus dados e o valor total em estoque do medicamento (quant_estoque * preço_unitário).
+1) Escreva funções específicas para a leitura dos dados das estruturas: Cidades, Especialidades, CID, Medicamentos. 🔄️⚠️ <- Incluir dados nos seus respectivos arrays
 
-7) Escreva uma função para exibir todos os registros da tabela de medicamentos que estejam com a quantidade em estoque abaixo do estoque mínimo. 
-    7.1) As seguintes informações devem ser exibidas: código, descrição, qtde estoque, estoque máximo, qtde a ser comprada, valor da compra.
-    7.1.1) A quantidade a ser comprada é calculada subtraindo o estoque máximo da quantidade em estoque.
-    7.2) Ao final, a função deverá exibir o valor total ser comprado.
+4) Escreva uma função para permitir a exclusão de registros na tabela de Pacientes. ⚠️ <- Pacientes e médicos não estão sendo excluidos corretamente
 
-8) Escreva uma função para exibir o valor total arrecadado com todas as consultas, que deve ser calculado pelo valor de cada consulta (R$100) acrescido do valor do medicamento receitado para cada consulta.
-    8.1) O valor do medicamento receitado para cada consulta deve ser calculado multiplicando a quantidade de medicamento receitada pelo preço unitário do medicamento.
