@@ -38,6 +38,11 @@
 6) Escreva uma função para permitir ao usuário consultar os dados de determinado medicamento. ✅
     6.1) Para cada medicamento consultado, exibir: todos os seus dados e o valor total em estoque do medicamento (quant_estoque * preço_unitário). ✅
 
+7) Escreva uma função para exibir todos os registros da tabela de medicamentos que estejam com a quantidade em estoque abaixo do estoque mínimo. ✅
+    7.1) As seguintes informações devem ser exibidas: código, descrição, qtde estoque, estoque máximo, qtde a ser comprada, valor da compra. ✅
+    7.1.1) A quantidade a ser comprada é calculada subtraindo o estoque máximo da quantidade em estoque. ✅
+    7.2) Ao final, a função deverá exibir o valor total ser comprado. ✅
+
 8) Escreva uma função para exibir o valor total arrecadado com todas as consultas, que deve ser calculado pelo valor de cada consulta (R$100) acrescido do valor do medicamento receitado para cada consulta. ✅
     8.1) O valor do medicamento receitado para cada consulta deve ser calculado multiplicando a quantidade de medicamento receitada pelo preço unitário do medicamento. ✅
 
@@ -53,8 +58,3 @@
 
 
 1) Escreva funções específicas para a leitura dos dados das estruturas: Cidades, Especialidades, CID, Medicamentos. 🔄️⚠️ <- Incluir dados nos seus respectivos arrays
-
-7) Escreva uma função para exibir todos os registros da tabela de medicamentos que estejam com a quantidade em estoque abaixo do estoque mínimo. ✅⚠️ <- Dar a opção de comprar
-    7.1) As seguintes informações devem ser exibidas: código, descrição, qtde estoque, estoque máximo, qtde a ser comprada, valor da compra. ✅
-    7.1.1) A quantidade a ser comprada é calculada subtraindo o estoque máximo da quantidade em estoque. ✅
-    7.2) Ao final, a função deverá exibir o valor total ser comprado. ✅
