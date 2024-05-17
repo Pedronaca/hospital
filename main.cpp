@@ -566,7 +566,7 @@ void selecionarMedicos(struct Medicos dbMedicos[], int& numMedicos) {
     system("cls");
 
     char conf = ' ';
-    const int numT = 20;
+    const int numT = 1;
     Medicos T[numT];
     int contT = 0;
     int cod_med;
@@ -595,6 +595,7 @@ void selecionarMedicos(struct Medicos dbMedicos[], int& numMedicos) {
             conf = toupper(conf);
             switch (conf) {
             case 'S':
+                T[0] = dbMedicos[m];
                 contT++;
                 excluirMedicos(dbMedicos, numMedicos, T, contT);
                 break;
@@ -779,7 +780,7 @@ void selecionarPacientes(struct Pacientes dbPacientes[], int& numPacientes) {
     system("cls");
 
     char conf = ' ';
-    const int numT = 20;
+    const int numT = 1;
     Pacientes T[numT];
     int contT = 0;
     long long int CPF;
@@ -808,6 +809,7 @@ void selecionarPacientes(struct Pacientes dbPacientes[], int& numPacientes) {
             conf = toupper(conf);
             switch (conf) {
             case 'S':
+                T[0] = dbPacientes[m];
                 contT++;
                 excluirPacientes(dbPacientes, numPacientes, T, contT);
                 break;
