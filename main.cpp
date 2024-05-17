@@ -440,15 +440,19 @@ void lerMedicos(
         while (!codValido) {
             cout << endl << "Informe o CODIGO do medico: ";
             cin >> codMedico;
-            for (int j = 0; j < numMedicos; j++) {
-                if (codMedico == dbMedicos[j].cod_med) {
-                    j = numMedicos; // Finaliza a contagem do "for"
-                    codValido = false;
-                    cout << "\033[31m" << "ESTE CODIGO JA ESTA EM USO!" << "\033[0m" << endl;
+            if (numMedicos != 0) {
+                for (int j = 0; j < numMedicos; j++) {
+                    if (codMedico == dbMedicos[j].cod_med) {
+                        j = numMedicos; // Finaliza a contagem do "for"
+                        codValido = false;
+                        cout << "\033[31m" << "ESTE CODIGO JA ESTA EM USO!" << "\033[0m" << endl;
+                    }
+                    else {
+                        codValido = true;
+                    }
                 }
-                else {
-                    codValido = true;
-                }
+            } else {
+                codValido = true;  
             }
             if (codValido) {
                 for (int j = 0; j < contT; j++) {
@@ -613,21 +617,25 @@ void selecionarMedicos(struct Medicos dbMedicos[], int& numMedicos) {
 }
 
 void excluirMedicos(struct Medicos dbMedicos[], int& numMedicos, struct Medicos T[], int contT) {
-    int x = 0, y = 0, z = 0; // x: cont array atualizado ; y: cont array sequencial ; z: cont array transição
+    int a = 0, s = 0, t = 0; // a: cont array atualizado ; s: cont array sequencial ; t: cont array transição
     const int numA = 40;
     Medicos A[numA];
 
-    for (; z < contT; z++) {
-        while (dbMedicos[y].cod_med == T[z].cod_med && y < numMedicos) {
-            y++;
+    for (; t < contT; s++) {
+        if (dbMedicos[s].cod_med != T[t].cod_med) {
+            A[a] = dbMedicos[s];
+            a++;
+        } else {
+            t++;
         }
-        if (y < numMedicos) {
-            A[x] = dbMedicos[y];
-            x++;
-        }
-        y++;
     }
-    for (int i = 0; i < x; ++i) {
+    while (s < numMedicos) {
+        A[a] = dbMedicos[s];
+        s++;
+        a++;
+    }
+
+    for (int i = 0; i < a; ++i) {
         dbMedicos[i] = A[i];
     }
 
@@ -640,6 +648,9 @@ void imprimirMedicos(struct Medicos dbMedicos[], int& numMedicos) {
     system("cls");
 
     cout << endl << "====== LISTA DE MEDICOS ======" << endl;
+
+    cout << endl << "Total de medicos: " << numMedicos << endl;
+
     for (int i = 0; i < numMedicos; i++) {
         cout << endl << "Nome: " << dbMedicos[i].nome << endl
             << "- Codigo: " << dbMedicos[i].cod_med << endl
@@ -668,15 +679,19 @@ void lerPacientes(struct Pacientes dbPacientes[], int& numPacientes, struct Cida
         while (!CPFValido) {
             cout << endl << "Informe o CPF do Paciente: ";
             cin >> CPF;
-            for (int j = 0; j < numPacientes; j++) {
-                if (CPF == dbPacientes[j].CPF) {
-                    j = numPacientes;
-                    CPFValido = false;
-                    cout << "\033[31m" << "ESTE CPF JA ESTA EM USO!" << "\033[0m" << endl;
+            if (numPacientes != 0) {
+                for (int j = 0; j < numPacientes; j++) {
+                    if (CPF == dbPacientes[j].CPF) {
+                        j = numPacientes;
+                        CPFValido = false;
+                        cout << "\033[31m" << "ESTE CPF JA ESTA EM USO!" << "\033[0m" << endl;
+                    }
+                    else {
+                        CPFValido = true;
+                    }
                 }
-                else {
-                    CPFValido = true;
-                }
+            } else {
+                CPFValido = true;
             }
             if (CPFValido) {
                 for (int j = 0; j < contT; j++) {
@@ -827,21 +842,25 @@ void selecionarPacientes(struct Pacientes dbPacientes[], int& numPacientes) {
 }
 
 void excluirPacientes(struct Pacientes dbPacientes[], int& numPacientes, struct Pacientes T[], int contT) {
-    int x = 0, y = 0, z = 0; // x: cont array atualizado ; y: cont array sequencial ; z: cont array transição
+    int a = 0, s = 0, t = 0; // a: cont array atualizado ; s: cont array sequencial ; t: cont array transição
     const int numA = 40;
     Pacientes A[numA];
 
-    for (; z < contT; z++) {
-        while (dbPacientes[y].CPF == T[z].CPF && y < numPacientes) {
-            y++;
+    for (; t < contT; s++) {
+        if (dbPacientes[s].CPF != T[t].CPF) {
+            A[a] = dbPacientes[s];
+            a++;
+        } else {
+            t++;
         }
-        if (y < numPacientes) {
-            A[x] = dbPacientes[y];
-            x++;
-        }
-        y++;
     }
-    for (int i = 0; i < x; ++i) {
+    while (s < numPacientes) {
+        A[a] = dbPacientes[s];
+        s++;
+        a++;
+    }
+
+    for (int i = 0; i < a; ++i) {
         dbPacientes[i] = A[i];
     }
 
@@ -1039,8 +1058,8 @@ void imprimirMedicamentos(struct Medicamentos dbMedicamentos[], int numMedicamen
     int cod_medic;
     bool codMedicValido = false;
 
-    cout << endl << "====== LISTA DE MEDICAMENTOS ======" << endl << endl;
-    cout << "Numero de medicamentos: " << numMedicamentos << endl << endl << endl;
+    cout << endl << "================= LISTA DE MEDICAMENTOS =================" << endl << endl;
+    cout << "Numero de medicamentos: " << numMedicamentos << endl << endl;
     cout << "\033[45m" << "(CODIGO) - DESCRICAO" << "\033[0m" << endl;
 
     for (int i = 0; i < numMedicamentos; i++) {
@@ -1054,7 +1073,7 @@ void imprimirMedicamentos(struct Medicamentos dbMedicamentos[], int numMedicamen
 
 
     while (!codMedicValido) {
-        cout << "Informe o CODIGO DO MEDICAMENTO ou OPCAO desejada: ";
+        cout << "Informe o CODIGO DO MEDICAMENTO ou a OPCAO desejada: ";
         cin >> cod_medic;
 
         switch (cod_medic) {
@@ -1079,23 +1098,57 @@ void imprimirMedicamentos(struct Medicamentos dbMedicamentos[], int numMedicamen
 void buscaFaltasMedicamentos(struct Medicamentos x[], int numMedicamentos) {
     system("cls");
 
-    int qtd_faltas = 0;
+    int qtd_faltas=0, cod_medic=0;
+    bool codMedicValido=false;
 
-    cout << "====== LISTA DE MEDICAMENTOS EM FALTA ======" << endl << endl;
+    cout <<"============= LISTA DE MEDICAMENTOS EM FALTA =============" << endl << endl;
 
     for (int i = 0; i < numMedicamentos; i++) {
         if (x[i].qtd_estoque < x[i].estoque_min) {
-            cout << "Medicamento: " << "\033[41m" << x[i].descricao << "\033[0m" << " = Codigo: " << x[i].cod_medic << endl 
+            cout << "Medicamento: " << "\033[41m" << x[i].descricao << "\033[0m" << " (Codigo: " << x[i].cod_medic << ")" << endl 
                 << "Em estoque: " << "\033[31m" << x[i].qtd_estoque << "\033[0m" << endl
                 << "Estoque minimo: " << "\033[33m" << x[i].estoque_min << "\033[0m" << endl
                 << "Estoque maximo: " << x[i].estoque_max << endl 
-                << "Quantidade a ser comprada: R$" << "\033[36m" << x[i].estoque_max - x[i].qtd_estoque << "\033[0m || Valor de compra: R$" << (x[i].estoque_max - x[i].qtd_estoque) * x[i].preco_un << endl << endl;
+                << "Quantidade a ser comprada: " << "\033[36m" << x[i].estoque_max - x[i].qtd_estoque << "\033[0m || Valor de compra: R$" << (x[i].estoque_max - x[i].qtd_estoque) * x[i].preco_un << endl << endl;
 
             qtd_faltas++;
         }
     }
+    if (qtd_faltas != 0) {
+        cout << endl << "=========================================================" << endl << endl
+            << "OPCOES:" << endl << endl
+            << "(0) - SAIR" << endl << endl;
+
+        while (!codMedicValido) {
+            cout << "Insira CODIGO do MEDICAMENTO para repor estoque ou a OPCAO desejada: ";
+            cin >> cod_medic;
+
+            switch (cod_medic) {
+                case 0:
+                    return; 
+
+                default:
+                    for (int i=0 ; i<numMedicamentos ; i++) {
+                        if (cod_medic == x[i].cod_medic) { // Validação se o codigo informado é valido
+                            if (x[i].qtd_estoque < x[i].estoque_min) { // Validação se de fato o medicamento possui estoque com falta
+                                codMedicValido = true;
+                                x[i].qtd_estoque = x[i].estoque_max - x[i].qtd_estoque;
+                            }
+                        }
+                    }
+                    if (codMedicValido) {
+                        cout << endl << "\033[32m" << "Estoque do medicamento foi reposto com sucesso!" << "\033[0m";
+                        getch();
+                        return;
+                    } else {
+                        cout << endl << "\033[31m" << "CODGIO DO MEDICAMENTO INVALIDO OU OPCAO INVALIDA" << "\033[0m";
+                    }
+                }
+            }
+    
+    }
     if (qtd_faltas == 0) {
-        cout << "\033[32m" << "NAO HA MEDICAMENTOS EM FALTA!" << "\033[0m" << endl << endl;
+        cout << "\033[36m" << "NAO HA MEDICAMENTOS EM FALTA!" << "\033[0m" << endl << endl;
     }
 
     getch();
