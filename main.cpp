@@ -250,11 +250,11 @@ bool buscaMedicamento(int cod_medic, struct Medicamentos x[], int numMedicamento
         if (cod_medic == x[i].cod_medic) {
             cout << "\33" << corTexto << "Medicamento: " << x[i].descricao << " - Quantidade em estoque: " << x[i].qtd_estoque << "\33[0m" << endl;
             if (detalhes) {
-                cout << "Estoque minimo: " << x[i].estoque_min << endl
+                cout << "\33" << corTexto << "Estoque minimo: " << x[i].estoque_min << endl
                     << "Estoque maximo: " << x[i].estoque_max << endl
                     << "Valor unitario: R$" << x[i].preco_un << endl  
                     << "Valor total em estoque: R$" << x[i].qtd_estoque * x[i].preco_un << endl
-                    << "Codigo do medicamento: " << x[i].cod_medic << endl << endl;
+                    << "Codigo do medicamento: " << x[i].cod_medic << "\33[0m" << endl << endl;
             }
 
             return true;
@@ -647,8 +647,7 @@ void excluirMedicos(struct Medicos dbMedicos[], int& numMedicos, struct Medicos 
 void imprimirMedicos(struct Medicos dbMedicos[], int& numMedicos) {
     system("cls");
 
-    cout << endl << "====== LISTA DE MEDICOS ======" << endl;
-
+    cout << endl << "================= \033[46mLISTA DE MEDICOS\033[0m =================" << endl;
     cout << endl << "Total de medicos: " << numMedicos << endl;
 
     for (int i = 0; i < numMedicos; i++) {
@@ -872,7 +871,7 @@ void excluirPacientes(struct Pacientes dbPacientes[], int& numPacientes, struct 
 void imprimirPacientes(struct Pacientes dbPacientes[], int& numPacientes) {
     system("cls");
 
-    cout << endl << "====== LISTA DE PACIENTES ======" << endl;
+    cout << endl << "================= \033[46mLISTA DE PACIENTES\033[0m =================" << endl;
     for (int i = 0; i < numPacientes; i++) {
         cout << endl << "Nome: " << dbPacientes[i].nome << endl
             << "- CPF: " << dbPacientes[i].CPF << endl
@@ -1029,7 +1028,7 @@ void imprimirConsultas(struct Consultas dbPaciente[], int numConsultas, struct M
     Especialidades ref[1];
     double totalArecadado=0;
 
-    cout << endl << "====== LISTA DE CONSULTAS ======" << endl << endl;
+    cout << endl << "================= \033[46mLISTA DE CONSULTAS\033[0m =================" << endl << endl;
     cout << "Numero de consultas: " << numConsultas << endl;
 
     for (int i=0 ; i<numConsultas ; i++) {
@@ -1058,7 +1057,7 @@ void imprimirMedicamentos(struct Medicamentos dbMedicamentos[], int numMedicamen
     int cod_medic;
     bool codMedicValido = false;
 
-    cout << endl << "================= LISTA DE MEDICAMENTOS =================" << endl << endl;
+    cout << endl << "================= \033[46mLISTA DE MEDICAMENTOS\033[0m =================" << endl << endl;
     cout << "Numero de medicamentos: " << numMedicamentos << endl << endl;
     cout << "\033[45m" << "(CODIGO) - DESCRICAO" << "\033[0m" << endl;
 
@@ -1086,7 +1085,7 @@ void imprimirMedicamentos(struct Medicamentos dbMedicamentos[], int numMedicamen
 
             default:
                 cout << endl;
-                if (buscaMedicamento(cod_medic, dbMedicamentos, numMedicamentos, true, "\033")) {
+                if (buscaMedicamento(cod_medic, dbMedicamentos, numMedicamentos, true, "[36m")) {
                     codMedicValido = true;
                 }
         }
@@ -1101,7 +1100,7 @@ void buscaFaltasMedicamentos(struct Medicamentos x[], int numMedicamentos) {
     int qtd_faltas=0, cod_medic=0;
     bool codMedicValido=false;
 
-    cout <<"============= LISTA DE MEDICAMENTOS EM FALTA =============" << endl << endl;
+    cout <<"============= \033[46mLISTA DE MEDICAMENTOS EM FALTA\033[0m =============" << endl << endl;
 
     for (int i = 0; i < numMedicamentos; i++) {
         if (x[i].qtd_estoque < x[i].estoque_min) {
