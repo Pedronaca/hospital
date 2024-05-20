@@ -34,7 +34,7 @@ struct CID {
 
 struct Medicamentos {
     int cod_medic, qtd_estoque, estoque_min, estoque_max;
-    double preco_un;
+    long double preco_un;
     string descricao;
 };
 
@@ -80,8 +80,8 @@ bool buscaDadosMedicos(int cod_med, struct Medicos x[], int numMedicos, struct E
 void lerPacientes(struct Pacientes dbPacientes[], int& numPacientes, struct Cidades dbCidades[], int numCidades);
 void incluirPacientes(struct Pacientes dbPacientes[], int& numPacientes, struct Pacientes T[], int contT);
 void selecionarPacientes(struct Pacientes dbPacientes[], int& numPacientes);
-void excluirPacientes(struct Pacientes dbPacientes[], int& numPacientes, struct Pacientes T[], int contT);
-void imprimirPacientes(struct Pacientes dbPacientes[], int& numPacientes);
+void excluirPacientes(struct Pacientes dbPacientes[], int &numPacientes, struct Pacientes T[], int contT);
+void imprimirPacientes(struct Pacientes dbPacientes[], int numPacientes);
 bool buscaDadosPacientes(long long int CPF, struct Pacientes x[], int numPacientes, struct Cidades y[], int numCidades);
 
 // CONSULTAS
@@ -310,7 +310,7 @@ bool consultaQuantidadeMedicamento(int cod_medic, struct Medicamentos x[], int n
     for (int i = 0; i < numMedicamentos; i++) {
         if (cod_medic == x[i].cod_medic ) {
             if (qtd_solicitada > x[i].qtd_estoque) {
-                cout << "\033[31m" << "QUANTIDADE SOLITIADA E MAIOR QUE A QUANTIDADE EM ESTOQUE" << "\033[0m" << endl << endl;
+                cout << "\033[31m" << "QUANTIDADE SOLITIADA E MAIOR QUE A QUANTIDADE EM ESTOQUE" << "\033[0m" << endl;
                 return false;
             } else {
                 cout << "\033[32m" << "Quantidade solicitada: " << qtd_solicitada << "\033[0m" << endl << endl;
@@ -634,7 +634,7 @@ void lerMedicos(
 
     // Laço de repetição para inclusão de médico(os)
     for (int i = 0; i < numT;) {
-        cout << endl << "====== INCLUIR MEDICO ======" << endl;
+        cout << endl << "================= \033[46mCADASTRO DE MEDICOS\033[0m =================" << endl;
         bool codValido = false, codEspecialidadeValido = false, codCidadeValido = false; // Reset das variáveis para a próxima execução do 'for'
 
         // Validação de código (existe ou não)
@@ -779,6 +779,7 @@ void selecionarMedicos(struct Medicos dbMedicos[], int& numMedicos) {
     int i = 0, f = numMedicos;
     int m = (i + f) / 2;
 
+    cout << endl << "================= \033[46mEXCLUIR MEDICO\033[0m =================" << endl << endl;
     cout << "Informe o CODIGO do medico: ";
     cin >> cod_med;
 
@@ -849,7 +850,7 @@ void imprimirMedicos(struct Medicos dbMedicos[], int& numMedicos) {
     system("cls");
 
     cout << endl << "================= \033[46mLISTA DE MEDICOS\033[0m =================" << endl;
-    cout << endl << "Total de medicos: " << numMedicos << endl;
+    cout << endl << "\033[45m" << "Total de medicos: " << numMedicos << "\033[0m" << endl;
 
     for (int i = 0; i < numMedicos; i++) {
         cout << endl << "Nome: " << dbMedicos[i].nome << endl
@@ -873,7 +874,7 @@ void lerPacientes(struct Pacientes dbPacientes[], int& numPacientes, struct Cida
     Pacientes T[numT];
 
     for (int i = 0; i < numT;) {
-        cout << endl << "====== INCLUIR PACIENTE ======" << endl;
+            cout << endl << "================= \033[46mCADASTRO DE PACIENTES\033[0m =================" << endl;
         bool CPFValido = false, codCidadeValido = false;
 
         while (!CPFValido) {
@@ -1003,6 +1004,7 @@ void selecionarPacientes(struct Pacientes dbPacientes[], int& numPacientes) {
     int i = 0, f = numPacientes;
     int m = (i + f) / 2;
 
+    cout << endl << "================= \033[46mEXCLUIR MEDICO\033[0m =================" << endl << endl;
     cout << "Informe o CPF do paciente: ";
     cin >> CPF;
 
@@ -1069,10 +1071,12 @@ void excluirPacientes(struct Pacientes dbPacientes[], int& numPacientes, struct 
     return;
 }
 
-void imprimirPacientes(struct Pacientes dbPacientes[], int& numPacientes) {
+void imprimirPacientes(struct Pacientes dbPacientes[], int numPacientes) {
     system("cls");
 
-    cout << endl << "================= \033[46mLISTA DE PACIENTES\033[0m =================" << endl;
+    cout << endl << "================= \033[46mLISTA DE PACIENTES\033[0m =================" << endl << endl;
+    cout << "\033[45m" << "Total de pacientes: " << numPacientes << "\033[0m" << endl;
+    
     for (int i = 0; i < numPacientes; i++) {
         cout << endl << "Nome: " << dbPacientes[i].nome << endl
             << "- CPF: " << dbPacientes[i].CPF << endl
@@ -1108,7 +1112,7 @@ void agendarConsulta(
     char conf = ' ';
     bool CPFValido=false, codMedValido=false, codCIDValido=false, codMedic=false, qtdSolicitadaValida=false;
 
-    cout << endl << "====== AGENDAR CONSULTA ======" << endl << endl;
+    cout << endl << "================= \033[46mAGENDAR CONSULTA\033[0m =================" << endl << endl;
 
     while (!CPFValido) {
         cout << "Informe o CPF do paciente: ";
@@ -1230,16 +1234,16 @@ void imprimirConsultas(struct Consultas dbPaciente[], int numConsultas, struct M
     double totalArecadado=0;
 
     cout << endl << "================= \033[46mLISTA DE CONSULTAS\033[0m =================" << endl << endl;
-    cout << "Numero de consultas: " << numConsultas << endl;
+    cout << "\033[45m" << "Numero de consultas: " << numConsultas << "\033[0m" << endl;
 
     for (int i=0 ; i<numConsultas ; i++) {
         totalArecadado = totalArecadado + 100 + (dbMedicamentos[indexMedicamento(dbPaciente[i].cod_medic, dbMedicamentos, numMedicamentos)].preco_un * dbPaciente[i].qtd_medic);
     }
 
-    cout << "Total arrecadado: R$" << totalArecadado << endl;
+    cout << "\033[42m" << "Total arrecadado: R$" << totalArecadado << "\033[0m" << endl;
 
     for (int i=0 ; i < numConsultas ; i++) {
-        cout << endl << "CPF Paciente: " << dbPaciente[i].CPF_paciente << endl;
+        cout << endl << endl << "CPF Paciente: " << dbPaciente[i].CPF_paciente << endl;
         buscaDadosMedicos(dbPaciente[i].cod_med, dbMedicos, numMedicos, ref, numEspecRef, false);
         cout << "Data: " << dbPaciente[i].data << endl;
         cout << "Horario: " << dbPaciente[i].horario << endl;
