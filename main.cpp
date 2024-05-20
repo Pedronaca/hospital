@@ -47,14 +47,16 @@ struct Consultas {
 
 // CIDADES
 bool buscaCidade(int codigo, struct Cidades x[], int numCidades);
-void lerCidade(struct Cidades x[]);
+void lerCidade(struct Cidades x[], int &numCidades);
+void imprimirCidades(struct Cidades x[], int numCidades);
 
 // ESPECIALIDADES
 bool buscaEspecialidade(int codigo, struct Especialidades x[], int numEspecialidades);
-void lerEspecialidade(struct Especialidades x[]);
+void lerEspecialidade(struct Especialidades x[], int &numEspecialidades);
+void imprimirEspecialides(struct Especialidades x[], int numEspecialidades);
 
 // MEDICAMENTOS
-void lerMedicamentos(struct Medicamentos x[]);
+void lerMedicamentos(struct Medicamentos x[], int &numMedicamentos);
 bool buscaMedicamento(int cod_medic, struct Medicamentos x[], int numMedicamentos, bool detalhes, string corTexto);
 bool consultaQuantidadeMedicamento(int cod_medic, struct Medicamentos x[], int numMedicamentos, int qtd_solicitada, int &indexDbMedicamento);
 void imprimirMedicamentos(struct Medicamentos dbMedicamentos[], int numMedicamentos);
@@ -62,7 +64,8 @@ void buscaFaltasMedicamentos(struct Medicamentos x[], int numMedicamentos);
 int indexMedicamento(int cod_medic, struct Medicamentos dbMedicamentos[], int numMedicamentos);
 
 // CID
-void lerCID(struct CID x[]);
+void lerCID(struct CID x[], int &numCID);
+void imprimirCID(struct CID x[], int numCID);
 bool buscaCID(string cod_cid, struct CID x[], int numCID, string corTexto);
 
 // MÉDICOS
@@ -85,6 +88,7 @@ bool buscaDadosPacientes(long long int CPF, struct Pacientes x[], int numPacient
 void agendarConsulta(struct Pacientes dbPacientes[], int numPacientes, struct Cidades dbCidades[], int numCidades, struct Medicos dbMedicos[], int numMedicos, struct Especialidades dbEspecialidades[], int numEspecialidades, struct CID dbCID[], int numCID, struct Medicamentos dbMedicamentos[], int numMedicamentos, struct Consultas dbConsultas[], int &numConsutlas);
 void incluirConsulta(struct Consultas dbConsultas[], int &numConsultas, struct Consultas T[], int indexDbMedicamento, struct Medicamentos dbMedicamentos[], int qtd_solicitada);
 void imprimirConsultas(struct Consultas dbPaciente[], int numConsultas, struct Medicos dbMedicos[], int numMedicos, struct CID dbCID[], int numCID, struct Medicamentos dbMedicamentos[], int numMedicamentos);
+
 
 int main() {
     int opcao = 0;
@@ -139,17 +143,27 @@ int main() {
 
         cout << "MENU: " << endl << endl;
         cout << "(1) - Incluir medico(s)" << endl;
-        cout << "(2) - Excluir medico(s)" << endl;
-        cout << "(3) - Listar medico(s)" << endl << endl;
+        cout << "(2) - Excluir medico" << endl;
+        cout << "(3) - Listar medicos" << endl << endl;
 
         cout << "(4) - Incluir paciente(s)" << endl;
-        cout << "(5) - Excluir paciente(s)" << endl;
-        cout << "(6) - Listar paciente(s)" << endl << endl;
+        cout << "(5) - Excluir paciente" << endl;
+        cout << "(6) - Listar pacientes" << endl << endl;
 
         cout << "(7) - Agendar consulta" << endl;
         cout << "(8) - Listar consultas" << endl << endl;
 
-        cout << "(9) - Listar medicamentos" << endl << endl;
+        cout << "(9) - Cadastrar medicamento(s)" << endl;
+        cout << "(10) - Listar medicamentos" << endl << endl;
+
+        cout << "(11) - Cadastrar cidade(s)" << endl;
+        cout << "(12) - Listar cidades" << endl << endl;
+
+        cout << "(13) - Cadastras especialidade(s)" << endl;
+        cout << "(14) - Listar especialides" << endl << endl;
+
+        cout << "(15) - Cadatrar CID(s)" << endl;
+        cout << "(16) - Listar CIDs" << endl << endl;
 
         cout << "(0) - Sair" << endl << endl;
 
@@ -190,7 +204,35 @@ int main() {
                 break;
 
             case 9:
+                lerMedicamentos(dbMedicamentos, numMedicamentos);
+                break;
+
+            case 10:
                 imprimirMedicamentos(dbMedicamentos, numMedicamentos);
+               break;
+
+            case 11:
+                lerCidade(dbCidades, numCidades);
+                break;
+            
+            case 12:
+                imprimirCidades(dbCidades, numCidades);
+                break;
+
+            case 13:
+                lerEspecialidade(dbEspecialidades, numEspecialidades);
+                break;
+            
+            case 14:
+                imprimirEspecialides(dbEspecialidades, numEspecialidades);
+                break;
+
+            case 15: 
+                lerCID(dbCID, numCID);
+                break;
+
+            case 16:
+                imprimirCID(dbCID, numCID);
                 break;
 
             default:
@@ -334,85 +376,244 @@ bool buscaDadosMedicos(int cod_med, struct Medicos x[], int numMedicos, struct E
 }
 
 
-void lerCidade(struct Cidades x[]) {
-    char conf;
-    cout << endl << "====== CADASTRO DE CIDADES ======" << endl;
-    for (int i = 0; i < i + 1; i++) {
-        cout << "Informe o NOME da cidade:" << endl;
-        cin >> x[i].nome;
-        cout << "Informe o CODIGO da cidade:" << endl;
-        cin >> x[i].cod_cidade;
-        cout << "Informe o UF da cidade:" << endl;
-        cin >> x[i].UF;
-        cout << endl << "Deseja cadastrar mais uma cidade? (S/N)" << endl;
+void lerCidade(struct Cidades x[], int &numCidades) {
+    int cod_cidade;
+    char conf = ' ';
+    bool codValido;
+
+    for (int i=numCidades ; i<40 ; i++) {
+        system("cls");
+
+        codValido = false;
+
+        cout << endl << "================= \033[46mCADASTRO DE CIDADES\033[0m =================" << endl;
+
+        cout << endl << "Informe o NOME da cidade: ";
+        cin.ignore();
+        getline(cin, x[i].nome);
+
+        while (!codValido) {
+            cout << endl << "Informe o CODIGO da cidade: ";
+            cin >> cod_cidade;
+            if (numCidades != 0) {
+                for (int j = 0 ; j < numCidades ; j++) {
+                    if (cod_cidade == x[j].cod_cidade) {
+                        j = numCidades;
+                        codValido = false;
+                        cout << "\033[31m" << "ESTE CODIGO JA ESTA EM USO!" << "\033[0m" << endl;
+                    }
+                    else {
+                        x[i].cod_cidade = cod_cidade; 
+                        codValido = true;
+                    }
+                }
+            }
+        }
+
+        cout << endl << "Informe o UF da cidade: ";
+        cin.ignore();
+        getline(cin, x[i].UF);
+
+        numCidades++;
+
+        cout << endl << "Deseja cadastrar mais uma cidade? (S/N): ";
         cin >> conf;
         conf = toupper(conf);
         if (conf != 'S') {
             return;
         }
-        cout << endl;
     }
 }
 
-void lerEspecialidade(struct Especialidades x[]) {
-    char conf;
-    cout << endl << "====== CADASTRO DE ESPECIALIDADES ======" << endl;
-    for (int i = 0; i < i + 1; i++) {
-        cout << "Informe a DESCRICAO da especialidade:" << endl;
-        cin >> x[i].descricao;
-        cout << "Informe o CODIGO da especialidade:" << endl;
-        cin >> x[i].cod_espec;
-        cout << endl << "Deseja cadastrar mais uma especialidade? (S/N)" << endl;
+void imprimirCidades(struct Cidades x[], int numCidades) {
+    system("cls");
+
+    cout << endl << "================= \033[46mLISTA DE CIDADES\033[0m =================" << endl;
+    
+    for (int i=0 ; i<numCidades ; i++) {
+        cout << endl
+            << "Nome: " << x[i].nome << endl
+            << "- Codigo da cidade: " << x[i].cod_cidade << endl
+            << "- UF: " << x[i].UF << endl << endl; 
+    }
+
+    getch();
+}
+
+void lerEspecialidade(struct Especialidades x[], int &numEspecialidades) {
+    int cod_espec;
+    char conf = ' ';
+    bool codValido;
+
+    for (int i=numEspecialidades ; i <40 ; i++) {
+        system("cls");
+
+        codValido = false;
+
+        cout << endl << "================= \033[46mCADASTRO DE ESPECIALIDADES\033[0m =================" << endl;
+
+        cout << endl << "Informe a DESCRICAO da especialidade: ";
+        cin.ignore();
+        getline(cin, x[i].descricao);
+
+        while (!codValido) {
+            cout << endl << "Informe o CODIGO da especialidade: ";
+            cin >> cod_espec;
+            if (numEspecialidades != 0) {
+                for (int j = 0; j < numEspecialidades ; j++) {
+                    if (cod_espec == x[j].cod_espec) {
+                        j = numEspecialidades;
+                        codValido = false;
+                        cout << "\033[31m" << "ESTE CODIGO JA ESTA EM USO!" << "\033[0m" << endl;
+                    }
+                    else {
+                        x[i].cod_espec = cod_espec;
+                        codValido = true;
+                    }
+                }
+            }
+        }
+
+        numEspecialidades++;
+
+        cout << endl << "Deseja cadastrar mais uma especialidade? (S/N): ";
+        cin >> conf;
+        conf = toupper(conf);
+
+        if (conf != 'S') {
+            return;
+        }
+    }
+}
+
+void imprimirEspecialides(struct Especialidades x[], int numEspecialidades) {
+    system("cls");
+
+    cout << endl << "================= \033[46mLISTA DE ESPECIALIDADES\033[0m =================" << endl;
+    
+    for (int i=0 ; i<numEspecialidades ; i++) {
+        cout << endl
+            << "Descricao: " << x[i].descricao << endl
+            << "- Codigo da especialide: " << x[i].cod_espec << endl << endl;
+    }
+
+    getch();
+}
+
+
+void lerCID(struct CID x[], int &numCID) {
+    string cod_cid;
+    char conf = ' ';
+    bool codValido;
+    
+    for (int i=numCID ; i<40 ; i++) {
+        system("cls");
+
+        codValido = false;
+
+        cout << endl << "================= \033[46mCADASTRO DE CID\033[0m =================" << endl;
+
+        cout << endl << "Informe a DESCRICAO da CID: ";
+        cin.ignore();
+        getline(cin, x[i].descricao);
+
+        while (!codValido) {
+            cout << endl << "Informe o CODIGO da CID: ";
+            cin >> cod_cid;
+            if (numCID != 0) {
+                for (int j = 0 ; j < numCID ; j++) {
+                    if (cod_cid == x[j].cod_cid) {
+                        j = numCID;
+                        codValido = false;
+                        cout << "\033[31m" << "ESTE CODIGO JA ESTA EM USO!" << "\033[0m" << endl;
+                    }
+                    else {
+                        x[i].cod_cid = cod_cid; 
+                        codValido = true;
+                    }
+                }
+            }
+        }
+
+        numCID++;
+
+        cout << endl << "Deseja cadastrar mais um CID? (S/N): ";
         cin >> conf;
         conf = toupper(conf);
         if (conf != 'S') {
             return;
         }
-        cout << endl;
     }
 }
 
-void lerCID(struct CID x[]) {
-    char conf;
-    cout << endl << "====== CADASTRO DE CID ======" << endl;
-    for (int i = 0; i < i + 1; i++) {
-        cout << "Informe a DESCRICAO da CID:" << endl;
-        cin >> x[i].descricao;
-        cout << "Informe o CODIGO da CID:" << endl;
-        cin >> x[i].cod_cid;
-        cout << endl << "Deseja cadastrar mais um CID? (S/N)" << endl;
-        cin >> conf;
-        conf = toupper(conf);
-        if (conf != 'S') {
-            return;
+void imprimirCID(struct CID x[], int numCID) {
+    system("cls");
+
+    cout << endl << "================= \033[46mLISTA DE CID\033[0m =================" << endl;
+    
+    for (int i=0 ; i<numCID ; i++) {
+        cout << endl
+            << "Descricao: " << x[i].descricao << endl
+            << "- Codigo da CID : " << x[i].cod_cid << endl << endl;
+    }
+
+    getch();
+}
+
+void lerMedicamentos(struct Medicamentos x[], int &numMedicamentos) {
+    int cod_medic;
+    char conf = ' ';
+    bool codValido;
+
+    for (int i=numMedicamentos ; i<40 ; i++) {
+        system("cls");
+
+        codValido = false;
+
+        cout << endl << "================= \033[46mCADASTRO DE MEDICAMENTOS\033[0m =================" << endl;
+
+        cout << endl << "Informe a DESCRICAO do medicamento: ";
+        cin.ignore();
+        getline(cin, x[i].descricao);
+
+        while (!codValido) {
+            cout << endl << "Informe o CODIGO do medicamento: ";
+            cin >> cod_medic;
+            if (numMedicamentos != 0) {
+                for (int j = 0 ; j < numMedicamentos ; j++) {
+                    if (cod_medic == x[j].cod_medic) {
+                        j = numMedicamentos;
+                        codValido = false;
+                        cout << "\033[31m" << "ESTE CODIGO JA ESTA EM USO!" << "\033[0m" << endl;
+                    }
+                    else {
+                        x[i].cod_medic = cod_medic; 
+                        codValido = true;
+                    }
+                }
+            }
         }
-        cout << endl;
-    }
-}
 
-void lerMedicamentos(struct Medicamentos x[]) {
-    char conf;
-    cout << endl << "====== CADASTRO DE MEDICAMENTOS ======" << endl;
-    for (int i = 0; i < i + 1; i++) {
-        cout << "Informe a DESCRICAO do medicamento:" << endl;
-        cin >> x[i].descricao;
-        cout << "Informe o CODIGO do medicamento:" << endl;
-        cin >> x[i].cod_medic;
-        cout << "Informe a QUANTIDADE EM ESTOQUE do medicamento:" << endl;
+        cout << endl << "Informe a QUANTIDADE EM ESTOQUE do medicamento: ";
         cin >> x[i].qtd_estoque;
-        cout << "Informe o ESTOQUE MINIMO do medicamento:" << endl;
+
+        cout << endl << "Informe o ESTOQUE MINIMO do medicamento: ";
         cin >> x[i].estoque_min;
-        cout << "Informe o ESTOQUE MAXIMO do medicamento:" << endl;
+
+        cout << endl << "Informe o ESTOQUE MAXIMO do medicamento: ";
         cin >> x[i].estoque_max;
-        cout << "Informe o PRECO UNITARIO do medicamento:" << endl;
+
+        cout << endl << "Informe o PRECO UNITARIO do medicamento: ";
         cin >> x[i].preco_un;
-        cout << endl << "Deseja cadastrar mais um CID? (S/N)" << endl;
+
+        numMedicamentos++;
+
+        cout << endl << "Deseja cadastrar mais um MEDICAMENTO? (S/N): ";
         cin >> conf;
         conf = toupper(conf);
         if (conf != 'S') {
             return;
         }
-        cout << endl;
     }
 }
 

@@ -55,6 +55,8 @@
 > Validação de campos:
     - Caso não houver a cidade/especialidade informada no cadastro do médico, NÃO CADASTRAR/ENTRAR EM LOOP 📍 <- Isso deverá valer para outros campos também
     - Aumentar a quantidade de dados em cada array do banco após inclcusão 📍<- Isso deverá valer para todos os arrays
+    - Padronizar nome de campos e funções 📍 <- Isso deve ser aplicado para todas as funções
+    - Deixar o programa mais bonito 📍
 
+1) Escreva funções específicas para a leitura dos dados das estruturas: Cidades, Especialidades, CID, Medicamentos. 🔄️⚠️ <- Corrigir valores muito grandes de medicamentos
 
-1) Escreva funções específicas para a leitura dos dados das estruturas: Cidades, Especialidades, CID, Medicamentos. 🔄️⚠️ <- Incluir dados nos seus respectivos arrays
