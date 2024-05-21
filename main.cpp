@@ -310,7 +310,7 @@ bool consultaQuantidadeMedicamento(int cod_medic, struct Medicamentos x[], int n
     for (int i = 0; i < numMedicamentos; i++) {
         if (cod_medic == x[i].cod_medic ) {
             if (qtd_solicitada > x[i].qtd_estoque) {
-                cout << "\033[31m" << "QUANTIDADE SOLITIADA E MAIOR QUE A QUANTIDADE EM ESTOQUE" << "\033[0m" << endl;
+                cout << "\033[31m" << "QUANTIDADE SOLICITADA E MAIOR QUE A QUANTIDADE EM ESTOQUE" << "\033[0m" << endl;
                 return false;
             } else {
                 cout << "\033[32m" << "Quantidade solicitada: " << qtd_solicitada << "\033[0m" << endl << endl;
